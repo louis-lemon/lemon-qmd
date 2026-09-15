@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Changes
+
+- lemon-qmd distribution: package renamed to `@lemoncloud/lemon-qmd`
+  (`2.8.3-lemon.0`), consumed from git tags instead of npm (`publish.yml`
+  removed). CI adds a `windows-latest` Node 22 job and an Electron 39 smoke job
+  that imports the SDK with dynamic `import()` and runs `searchLex`. See
+  `README.ko.md`.
+
 ## [2.8.3] - 2026-08-16
 
 ### Security
