@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [2.8.3-lemon.1] - 2026-09-16
+
+### Fixes
+
+- `pnpm-lock.yaml` regenerated from `package.json`. The checked-in lockfile was
+  stale upstream, so installing this package from a git tag with pnpm failed in
+  `prepare` with `ERR_PNPM_OUTDATED_LOCKFILE` (npm installs were unaffected).
+
 ## [2.8.3-lemon.0] - 2026-09-16
 
 ### Changes
