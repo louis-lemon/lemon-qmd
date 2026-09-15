@@ -9,6 +9,10 @@
   removed). CI adds a `windows-latest` Node 22 job and an Electron 39 smoke job
   that imports the SDK with dynamic `import()` and runs `searchLex`. See
   `README.ko.md`.
+- Hangul lex queries: an unquoted Korean word also matches its stem with one
+  trailing particle or `기` stripped (`검색을` → `("검 색" OR "검 색 을")`,
+  stem ≥2 syllables). Quoted phrases and Han/kana terms are unchanged. ko-vault
+  bench `bm25_r5` 0.6250 → 0.6528.
 
 ## [2.8.3] - 2026-08-16
 

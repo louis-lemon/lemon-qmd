@@ -6,7 +6,7 @@
 |---|---|---|
 | B0 포크 부트스트랩(루프 부분) | ✅ | 사람 부분(포크·upstream·`lemon`) 확인됨 |
 | B1 픽스처 복사 + bench-ko.sh | ✅ | 원본 2nd-brain `e856721`, 기준선 `test/fixtures/ko-vault/BASELINE.md` |
-| B2 Q1 한글 질의 조사 stripping | ⬜ | |
+| B2 Q1 한글 질의 조사 stripping | ✅ | 조사 목록만으론 0.6250(무변화) — `기` 어미 추가로 통과. 표 `BASELINE.md` B2 |
 | B3 I1 한글 색인 bigram | ⬜ | |
 | B4 한국어 기본값 + 스킬 + 문서 | ⬜ | |
 
@@ -14,6 +14,7 @@
 
 RESULT B0 name=@lemoncloud/lemon-qmd version=2.8.3-lemon.0 publish_yml=removed ci=windows-latest+electron-smoke sdk_smoke=test/sdk-lemon.test.ts electron_smoke_node=searchLex=1 windows_ci=미측정(push 후 첫 실행)
 RESULT B1 fixture=e856721 docs=28 queries=36 bm25_r5=0.6250 vector_r5=0.9861 hybrid_r5=0.9583|1.0000 full_r5=1.0000 full_mrr=0.9444|0.9583 model=embeddinggemma
+RESULT B2 bm25_r5=0.6528|0.6528 vector_r5=0.9861 hybrid_r5=1.0000|1.0000 full_r5=1.0000 full_mrr=0.9583|0.9444 particles_only_bm25_r5=0.6250 store_ts_touchpoints=1 test=test/store-hangul-query.test.ts
 
 ## 메모
 

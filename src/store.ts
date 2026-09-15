@@ -19,6 +19,7 @@ import { readFileSync, realpathSync, statSync, mkdirSync } from "node:fs";
 // Note: node:path resolve is not imported — we export our own cross-platform resolve()
 import fastGlob from "fast-glob";
 import { qmdHomedir } from "./paths.js";
+import { hangulTermQuery } from "./hangul.js";
 import {
   LlamaCpp,
   getDefaultLlamaCpp,
@@ -3956,8 +3957,12 @@ function buildFTS5Query(query: string): string | null {
           }
         }
       } else if (containsCjk(term)) {
-        const sanitized = sanitizeFTS5Phrase(term);
-        if (sanitized) {
+        // lemon-qmd: Hangul words also match their particle-stripped stem
+        const hangul = negated ? null : hangulTermQuery(term);
+        const sanitized = hangul ? null : sanitizeFTS5Phrase(term);
+        if (hangul) {
+          positive.push(hangul);
+        } else if (sanitized) {
           const ftsPhrase = `"${sanitized}"`;  // CJK phrase over character tokens
           if (negated) {
             negative.push(ftsPhrase);

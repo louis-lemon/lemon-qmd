@@ -136,3 +136,4 @@
 | `run.sh B`의 루프 로그 디렉터리 = `tmp/bench-ko/` = 벤치 격리 디렉터리. B1 첫 초안이 `rm -rf tmp/bench-ko`로 실행 중 루프 로그(`loop-B-*.log`)를 지웠다 (B1 실측) | `bench-ko.sh`는 자기 산출물(`config/`·`index.sqlite*`·`bench.json`)만 지운다 |
 | 같은 코드·모델로 연속 2회 `hybrid_r5` 1.0000 / 0.9583, `full_mrr` 0.9444 / 0.9583 — hybrid도 실행 간 흔들린다. `bm25_r5` 0.6250은 동일 (B1 실측) | B2/B3 판정은 `bm25_r5`로. hybrid·full 비교는 여러 회 실행 후 |
 | `2.8.3-lemon.0` 같은 prerelease 버전은 `test/esm-ambiguous-module.test.ts`의 `qmd --version` 정규식(`\d+\.\d+\.\d+`)에 걸려 실패한다 (B0 실측) | 정규식에 semver prerelease 접미사 허용 추가 — 업스트림 리베이스 시 충돌 후보 |
+| Q1을 design §4 조사 목록대로만 구현하면 ko-vault `bm25_r5` 0.6250 — 기준선과 같다. 명사형 어미 `기`를 더해야 0.6528(sem-07 `나누기`). 남은 BM25 미스 13건은 모든 term이 AND라 활용형 동사(`만드는`·`정리해`·`들었는지`)나 문서에 없는 단어 하나가 질의 전체를 0건으로 만든다 (B2 실측). `NEEDS-2nd-brain-FIX`: §4 목록에 `기` 추가 | `src/hangul.ts` 접미사 = 조사 + `기`. 추가 이득은 접미사가 아니라 한글 다어절 질의의 AND 완화나 형태소 분석(kiwi) 쪽 — B3 이후 판단 |
