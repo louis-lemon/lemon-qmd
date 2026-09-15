@@ -17,6 +17,7 @@ texts/
 !docs/*.md
 !README.ko.md
 !docs/vault-search/**/*.md
+!test/fixtures/ko-vault/**/*.md
 finetune/outputs/
 finetune/data/train/
 .claude/

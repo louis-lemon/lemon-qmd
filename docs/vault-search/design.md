@@ -132,4 +132,7 @@
 | vitest(시스템 Node 22.23, ABI 127)와 Electron 리빌드 `better-sqlite3`(ABI 140) 충돌 — qmd를 import하는 앱 단위 테스트는 `NODE_MODULE_VERSION` 불일치로 죽는다 (REVIEW 2026-09-15) | 앱 단위 테스트는 **가짜 store로 격리**(qmd 의존성 추가 전 준비 커밋에서 IPC 계약 + 가짜 store 먼저). 실 SDK 스모크는 `ELECTRON_RUN_AS_NODE=1 electron` 또는 Playwright e2e. 모델이 필요한 수치는 앱 CI에 넣지 않는다 |
 | 업스트림 `package.json`에 `lint` 스크립트가 없다 — B0 판정 `npm run lint`가 그대로는 rc≠0 (B0 실측) | `lint` = `tsc -p tsconfig.build.json --noEmit`(`test:types`와 같은 검사). oxlint 도입은 패치 스택 밖 |
 | `electron`을 devDependency로 넣으면 git 설치 소비자가 `prepare`용 devDependencies 설치 때 Electron 바이너리(~100MB)까지 받는다 (B0) | `electron@39`·`@electron/rebuild`는 CI `electron-smoke` 잡에서만 `npm install --no-save` |
+| `bench-ko.sh`의 `npm ci`는 격리 스냅샷에서 실패한다 — `package-lock.json`이 `.gitignore`에 있어 커밋에 없다 (B1 실측) | `[ -d node_modules ] \|\| npm install`로 대체. 재현성은 `package.json` 범위에 의존 |
+| `run.sh B`의 루프 로그 디렉터리 = `tmp/bench-ko/` = 벤치 격리 디렉터리. B1 첫 초안이 `rm -rf tmp/bench-ko`로 실행 중 루프 로그(`loop-B-*.log`)를 지웠다 (B1 실측) | `bench-ko.sh`는 자기 산출물(`config/`·`index.sqlite*`·`bench.json`)만 지운다 |
+| 같은 코드·모델로 연속 2회 `hybrid_r5` 1.0000 / 0.9583, `full_mrr` 0.9444 / 0.9583 — hybrid도 실행 간 흔들린다. `bm25_r5` 0.6250은 동일 (B1 실측) | B2/B3 판정은 `bm25_r5`로. hybrid·full 비교는 여러 회 실행 후 |
 | `2.8.3-lemon.0` 같은 prerelease 버전은 `test/esm-ambiguous-module.test.ts`의 `qmd --version` 정규식(`\d+\.\d+\.\d+`)에 걸려 실패한다 (B0 실측) | 정규식에 semver prerelease 접미사 허용 추가 — 업스트림 리베이스 시 충돌 후보 |
