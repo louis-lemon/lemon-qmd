@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.8.3-lemon.0] - 2026-09-16
+
 ### Changes
 
 - lemon-qmd distribution: package renamed to `@lemoncloud/lemon-qmd`
