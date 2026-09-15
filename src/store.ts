@@ -19,7 +19,7 @@ import { readFileSync, realpathSync, statSync, mkdirSync } from "node:fs";
 // Note: node:path resolve is not imported — we export our own cross-platform resolve()
 import fastGlob from "fast-glob";
 import { qmdHomedir } from "./paths.js";
-import { hangulTermQuery } from "./hangul.js";
+import { hangulBigramTail, hangulTermQuery } from "./hangul.js";
 import {
   LlamaCpp,
   getDefaultLlamaCpp,
@@ -861,7 +861,7 @@ let _sqliteVecAvailable: boolean | null = null;
 
 const CJK_CHAR_PATTERN = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u;
 const CJK_RUN_PATTERN = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]+/gu;
-const FTS_CJK_NORMALIZED_VERSION = "1";
+const FTS_CJK_NORMALIZED_VERSION = "2"; // lemon-qmd: "2" adds Hangul bigrams
 
 // Bump when any FTS sync trigger body in applyFtsSyncTriggers changes, so the
 // new definition is reapplied to existing databases on next open.
@@ -873,6 +873,12 @@ const STORE_SCHEMA_VERSION = 1;
  * translated into phrase queries while Latin text keeps the default tokenizer.
  */
 export function normalizeCjkForFTS(text: string): string {
+  // lemon-qmd: indexed text also carries Hangul syllable bigrams at the end
+  const bigrams = hangulBigramTail(text);
+  return bigrams ? `${spaceCjkRuns(text)} ${bigrams}` : spaceCjkRuns(text);
+}
+
+function spaceCjkRuns(text: string): string {
   return text.replace(CJK_RUN_PATTERN, run => ` ${Array.from(run).join(' ')} `);
 }
 
@@ -884,7 +890,8 @@ function sanitizeFTS5Phrase(phrase: string): string {
   // Dotted tokens (1.0.21, 2026.4.10) are indexed as adjacent parts by the
   // porter unicode61 tokenizer. Stripping the dots would produce "1021",
   // which never matches — split them into phrase terms instead (#757).
-  return normalizeCjkForFTS(phrase)
+  // lemon-qmd: query phrases use character tokens only, not the bigram tail.
+  return spaceCjkRuns(phrase)
     .split(/\s+/)
     .flatMap(t => {
       if (isDottedToken(t)) {
@@ -3957,7 +3964,7 @@ function buildFTS5Query(query: string): string | null {
           }
         }
       } else if (containsCjk(term)) {
-        // lemon-qmd: Hangul words also match their particle-stripped stem
+        // lemon-qmd: Hangul words query bigrams and their particle-stripped stem
         const hangul = negated ? null : hangulTermQuery(term);
         const sanitized = hangul ? null : sanitizeFTS5Phrase(term);
         if (hangul) {

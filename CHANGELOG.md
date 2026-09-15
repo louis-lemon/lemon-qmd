@@ -13,6 +13,12 @@
   trailing particle or `기` stripped (`검색을` → `("검 색" OR "검 색 을")`,
   stem ≥2 syllables). Quoted phrases and Han/kana terms are unchanged. ko-vault
   bench `bm25_r5` 0.6250 → 0.6528.
+- Hangul syllable bigrams in the FTS index: each indexed field carries the
+  bigrams of its Hangul runs after the character tokens, and a plain Korean word
+  queries bigram OR character phrases of the word and its stem. Character-phrase
+  and quoted-phrase matching is unchanged. `FTS_CJK_NORMALIZED_VERSION` is now
+  `"2"`, so existing indexes rebuild FTS once on open. ko-vault bench
+  `bm25_r5` 0.6528 → 0.6528 (no measured gain on the fixture).
 
 ## [2.8.3] - 2026-08-16
 
