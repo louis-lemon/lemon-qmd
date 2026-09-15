@@ -19,6 +19,13 @@
   and quoted-phrase matching is unchanged. `FTS_CJK_NORMALIZED_VERSION` is now
   `"2"`, so existing indexes rebuild FTS once on open. ko-vault bench
   `bm25_r5` 0.6528 → 0.6528 (no measured gain on the fixture).
+- Korean defaults: the default embedding model is now
+  `hf:Qwen/Qwen3-Embedding-0.6B-GGUF/Qwen3-Embedding-0.6B-Q8_0.gguf`
+  (1024 dimensions; upstream default is embeddinggemma-300M). Reranker and
+  query-expansion defaults are unchanged. Existing indexes need `qmd embed -f`;
+  set `models: embed:` or `QMD_EMBED_MODEL` to keep embeddinggemma. The qmd skill
+  gains a "Korean queries" section. Hangul handling and ko-vault bench numbers
+  are in `README.ko.md`.
 
 ## [2.8.3] - 2026-08-16
 

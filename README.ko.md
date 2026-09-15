@@ -10,8 +10,34 @@
 ## 업스트림과 다른 점
 
 1. 패키징: 이름·repository·플러그인 marketplace owner, `publish.yml` 제거, CI에 `windows-latest`와 Electron 스모크 잡 추가
-2. (예정) 한글 FTS — 질의 조사 처리·음절 bigram 색인 (`src/hangul.ts`)
-3. (예정) 한국어 기본값 — 기본 임베딩 Qwen3-Embedding-0.6B, 스킬 한국어 절
+2. Hangul FTS (`src/hangul.ts`, `store.ts` 접점 2곳)
+   - 질의: 따옴표 없는 한글 단어는 끝 조사 하나 또는 `기`를 뗀 어간도 매칭한다(`검색을` → `검색`, 어간 2음절 이상). 따옴표 구문·한자·가나는 그대로.
+   - 색인: 한글 구간의 음절 bigram을 필드 끝에 덧붙인다. `FTS_CJK_NORMALIZED_VERSION`이 `"2"`라 기존 인덱스는 처음 열 때 FTS를 한 번 다시 만든다.
+3. 한국어 기본값
+   - 기본 임베딩 모델: `hf:Qwen/Qwen3-Embedding-0.6B-GGUF/Qwen3-Embedding-0.6B-Q8_0.gguf`(업스트림은 embeddinggemma-300M). 리랭커·질의 확장 모델은 업스트림 기본값 그대로. 업스트림 [README.md](README.md)의 모델 표·"Custom Embedding Model" 절은 업스트림 기본값 기준이다.
+   - 스킬 `skills/qmd/SKILL.md`에 "Korean queries" 절(`lex:`에 어간·alias·영문 용어, `vec:`에 한국어 패러프레이즈).
+
+### 기본 임베딩 변경 후 재임베딩
+
+벡터는 모델 사이에 호환되지 않는다. embeddinggemma로 만든 기존 인덱스는 다시 임베딩해야 한다.
+
+```sh
+qmd embed -f
+```
+
+embeddinggemma를 계속 쓰려면 `index.yml`의 `models: embed:` 또는 `QMD_EMBED_MODEL`로 지정한다.
+
+### ko-vault 벤치
+
+`bash scripts/bench-ko.sh` (픽스처 `test/fixtures/ko-vault/`, 문서 28·질의 36, 임베딩은 픽스처 `models.yml`의 embeddinggemma로 고정). 표와 run별 수치는 [BASELINE.md](test/fixtures/ko-vault/BASELINE.md).
+
+| 단계 | bm25_r5 | vector_r5 | full_r5 |
+|---|---|---|---|
+| 업스트림 2.8.3 (B1) | 0.6250 | 0.9861 | 1.0000 |
+| + 질의 조사 처리 (B2) | 0.6528 | 0.9861 | 1.0000 |
+| + bigram 색인 (B3) | 0.6528 | 0.9861 | 1.0000 |
+
+Qwen3-Embedding 기본값의 벤치 수치는 미측정이다(design §6 라운드 M1).
 
 ## 설치
 

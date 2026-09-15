@@ -8,7 +8,7 @@
 | B1 픽스처 복사 + bench-ko.sh | ✅ | 원본 2nd-brain `e856721`, 기준선 `test/fixtures/ko-vault/BASELINE.md` |
 | B2 Q1 한글 질의 조사 stripping | ✅ | 조사 목록만으론 0.6250(무변화) — `기` 어미 추가로 통과. 표 `BASELINE.md` B2 |
 | B3 I1 한글 색인 bigram | ✅ | 시도 2. bigram-only 질의는 0.5972(띄어쓰기 변형 0건) — 글자 phrase OR 유지로 B2와 동률. 표 `BASELINE.md` B3 |
-| B4 한국어 기본값 + 스킬 + 문서 | ⬜ | |
+| B4 한국어 기본값 + 스킬 + 문서 | ✅ | M1 미실험 → Qwen3-Embedding-0.6B-Q8_0. Qwen3 벤치 수치 미측정(ko-vault `models.yml`이 embeddinggemma 고정). 태그·발행은 NEEDS-HUMAN |
 
 ## RESULT
 
@@ -16,6 +16,7 @@ RESULT B0 name=@lemoncloud/lemon-qmd version=2.8.3-lemon.0 publish_yml=removed c
 RESULT B1 fixture=e856721 docs=28 queries=36 bm25_r5=0.6250 vector_r5=0.9861 hybrid_r5=0.9583|1.0000 full_r5=1.0000 full_mrr=0.9444|0.9583 model=embeddinggemma
 RESULT B2 bm25_r5=0.6528|0.6528 vector_r5=0.9861 hybrid_r5=1.0000|1.0000 full_r5=1.0000 full_mrr=0.9583|0.9444 particles_only_bm25_r5=0.6250 store_ts_touchpoints=1 test=test/store-hangul-query.test.ts
 RESULT B3 bm25_r5=0.6528|0.6528 vector_r5=0.9861 hybrid_r5=0.9861|0.9583 full_r5=1.0000|1.0000 full_mrr=0.9306|0.9444 bigram_only_bm25_r5=0.5972 per_query_bm25_delta=0 fts_cjk_version=2 store_ts_touchpoints=2 test=test/store-cjk-fts.test.ts(v1→v2)
+RESULT B4 default_embed=hf:Qwen/Qwen3-Embedding-0.6B-GGUF/Qwen3-Embedding-0.6B-Q8_0.gguf dims=1024 rerank_generate=unchanged skill=Korean-queries docs=README.ko.md+CHANGELOG.md lint=0 test_types=0 test_unit=0(vitest 45 files, bun 1158 pass) qwen3_bench=미측정 tag=NEEDS-HUMAN
 
 ## 메모
 
