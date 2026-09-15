@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/npm-probe" && cd "$RUNNER_TEMP/npm-probe"
           npm init -y >/dev/null
-          npm i --foreground-scripts --no-audit --no-fund github:louis-lemon/lemon-qmd#v2.8.3-lemon.0
+          npm i --foreground-scripts --no-audit --no-fund github:louis-lemon/lemon-qmd#feat/hangul-fts
           node -e "require('fs').accessSync('node_modules/@lemoncloud/lemon-qmd/dist/index.js')"
       - name: pnpm install from tag
         if: always()
@@ -26,5 +26,5 @@ jobs:
           npm i -g pnpm@10.17.1
           mkdir -p "$RUNNER_TEMP/pnpm-probe" && cd "$RUNNER_TEMP/pnpm-probe"
           npm init -y >/dev/null
-          pnpm add --reporter=append-only --loglevel=debug "github:louis-lemon/lemon-qmd#v2.8.3-lemon.0"
+          pnpm add --reporter=append-only --loglevel=debug "github:louis-lemon/lemon-qmd#feat/hangul-fts"
           node -e "require('fs').accessSync('node_modules/@lemoncloud/lemon-qmd/dist/index.js')"
