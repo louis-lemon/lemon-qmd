@@ -84,15 +84,7 @@
     "vitest": "3.2.7"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3",
-      "esbuild",
-      "node-llama-cpp",
-      "tree-sitter-go",
-      "tree-sitter-python",
-      "tree-sitter-rust",
-      "tree-sitter-typescript"
-    ]
+    "onlyBuiltDependencies": []
   },
   "peerDependencies": {
     "typescript": "^5.9.3"

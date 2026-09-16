@@ -6,9 +6,14 @@
 
 ### Fixes
 
-- `pnpm-lock.yaml` regenerated from `package.json`. The checked-in lockfile was
-  stale upstream, so installing this package from a git tag with pnpm failed in
-  `prepare` with `ERR_PNPM_OUTDATED_LOCKFILE` (npm installs were unaffected).
+- pnpm consumers install this package from a git tag, where pnpm runs `prepare`
+  (tsc only). Two things broke that on Windows: a stale `pnpm-lock.yaml`
+  (`ERR_PNPM_OUTDATED_LOCKFILE`) and `pnpm.onlyBuiltDependencies`, which made
+  pnpm build better-sqlite3 from source in an environment with no Visual Studio.
+  The lockfile is regenerated and the built-dependency list is now empty — the
+  `dist` build needs no native module, and consumers build their own. Run
+  `pnpm approve-builds` when developing this repo with pnpm. npm installs were
+  unaffected.
 
 ## [2.8.3-lemon.0] - 2026-09-16
 
